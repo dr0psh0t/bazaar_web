@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head">
+</head>
+<body>
+<div th:replace="fragments :: navbar_menu"></div>
+<div th:replace="fragments :: admin_sidenav"></div>
+
+<div class="justify-content-center main">
+
+    <div th:if="${saveSuccess}" data-th-text="#{app.flash.message.save.complete}" class="alert alert-success align-items-right" role="alert"></div>
+    <div th:if="${deleteSuccess}" data-th-text="#{app.flash.message.delete.complete}" class="alert alert-success align-items-right" role="alert"></div>
+    <div th:if="${saveError}" data-th-text="#{app.flash.message.save.error}" class="alert alert-danger alert-failure align-items-right" role="alert"></div>
+
+    <div class="row">
+        <div class="container page-title col-md-11 col-sm-12">
+            <h3 data-th-text="#{app.table.header.notifications}"></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container content bg-white search-container col-md-11 col-sm-12">
+            <form action="#" th:action="@{'/'+#{app.message.locale}+'/admin/notification/index/1'}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-search" data-th-placeholder="#{app.search.placeholder.notification.title    }" name="notificationTitle">
+                    <div class="input-group-append">
+                        <button class="btn btn-search" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container content bg-white col-md-11 col-sm-12">
+            <form id="deleteNotificationForm" th:action="@{'/'+#{app.message.locale}+'/admin/notification/delete'}" action="#" method="POST">
+                <table class="table">
+                    <thead>
+                    <th class="text-center"></th>
+                    <th class="text-center" data-th-text="#{column.header.id}">ID</th>
+                    <th class="text-center" data-th-text="#{column.header.category}"></th>
+                    <th class="text-center" data-th-text="#{column.header.title}">=</th>
+                    <th class="text-center" data-th-text="#{column.header.updated_at}"></th>
+                    <th class="text-center" data-th-text="#{column.header.publication_date}"></th>
+                    <th class="text-center" data-th-text="#{column.header.edit}"></th>
+                    </thead>
+                    <tbody>
+                    <tr th:each="notification : ${notifications}" class="text-center">
+                        <td><input type="checkbox" name="notifications" th:value="${notification.id}"></td>
+                        <td th:text="${notification.id}"/>
+                        <td th:text="${notification.notificationCategory.name}"/>
+                        <td th:text="${notification.title}"/>
+                        <td th:text="${#temporals.format(notification.updatedAt, 'yyyy/MM/dd HH:mm')}"/>
+                        <td th:text="${#temporals.format(notification.publicationDate, 'yyyy/MM/dd HH:mm')}"/>
+                        <td>
+                            <a th:href="@{'/'+#{app.message.locale}+'/admin/notification/update/' + ${notification.id}}" class="btn btn-sm btn-action">
+                                <i class="fas fa-edit" data-th-text="#{row.label.edit}"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p th:if="${totalEntries == 0}" style="text-align: center" data-th-text="#{table.footer.message.notification_not_found}"></p>
+
+                <div class="float-right">
+                    <input type="button" data-th-value="#{table.button.label.delete}" id="deleteNotificationButton" data-toggle="modal" data-target="#confirmSubmitNotificationModal"
+                           class="btn btn-sm btn-delete btn-red float-right">
+                    <a th:href="@{'/'+#{app.message.locale}+'/admin/notification/add'}" class="btn btn-sm btn-primary btn-add float-right" data-th-text="#{table.button.label.add}"></a>
+                </div>
+
+                <div class="modal fade" id="confirmSubmitNotificationModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" data-th-text="#{modal.delete.confirmation.notification.title}"></h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p data-th-text="#{modal.delete.confirmation.body}"></p>
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal" data-th-text="#{modal.delete.confirmation.button.cancel}"></button>
+                                    <input type="submit" data-th-value="#{modal.delete.confirmation.button.delete}" class="btn btn-red"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="errorDeleteNotificationModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p data-th-text="#{modal.delete.no_selected_notification.body}"></p>
+                                <button data-th-text="#{modal.delete.no_selection.button}" type="button" class="btn btn-default float-right" data-dismiss="modal"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="container pagination-content col-md-11 col-sm-12" th:if="${totalEntries > 0}">
+            <span>Showing [[${firstEntry}]] to [[${lastEntry}]] of [[${totalEntries}]] entries</span>
+
+            <ul class="pagination pagination-sm page-numbers float-right">
+                <li class="page-item" th:classappend="${currentPageNumber == 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:if="${param.notificationTitle}" data-th-text="#{table.paging.prev}"
+                       th:href="@{'/'+#{app.message.locale}+'/admin/notification/index/' + ${currentPageNumber-1} + '?notificationTitle=' + ${notificationTitle}}">
+                    </a>
+                    <a th:unless="${param.notificationTitle}" class="page-link" data-th-text="#{table.paging.prev}"
+                       th:href="@{'/'+#{app.message.locale}+'/admin/notification/index/' + ${currentPageNumber-1}}">
+                    </a>
+                </li>
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == notifications.number + 1 ? 'active' : ''}">
+                    <a class="page-link" th:if="${param.notificationTitle}"
+                       th:href="@{'/'+#{app.message.locale}+'/admin/notification/index/' + ${pageNumber} + '?notificationTitle=' + ${notificationTitle}}" th:text=${pageNumber}>
+                    </a>
+                    <a class="page-link" th:unless="${param.notificationTitle}"
+                       th:href="@{'/'+#{app.message.locale}+'/admin/notification/index/' + ${pageNumber}}" th:text=${pageNumber}>
+                    </a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPageNumber == totalPages ? 'disabled' : ''}">
+                    <a class="page-link" th:if="${param.notificationTitle}"
+                       th:href="@{'/'+#{app.message.locale}+'/admin/notification/index/' + ${currentPageNumber+1} + '?notificationTitle=' + ${notificationTitle}}" data-th-text="#{table.paging.next}">
+                    </a>
+                    <a th:unless="${param.notificationTitle}"
+                       th:href="@{'/'+#{app.message.locale}+'/admin/notification/index/' + ${currentPageNumber+1}}" class="page-link" data-th-text="#{table.paging.next}">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments :: scripts"></div>
+
+</body>
+</html>

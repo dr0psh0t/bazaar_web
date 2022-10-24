@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head"></head>
+<body>
+<div th:replace="fragments :: navbar_menu"></div>
+<div th:replace="fragments :: admin_sidenav"></div>
+
+<div class="justify-content-center main">
+    <div class="row">
+        <div class="container page-title col-md-11 col-sm-12">
+            <h3 data-th-text="#{app.table.header.customers}"></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container content bg-white search-container col-md-11 col-sm-12">
+            <form action="#" th:action="@{'/'+#{app.message.locale}+'/admin/account/1'}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-search" data-th-placeholder="#{app.search.placeholder.company_name}" name="companyName">
+                    <div class="input-group-append">
+                        <button class="btn btn-search" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container content bg-white col-md-11 col-sm-12">
+            <form id="deleteCustomerForm" th:action="@{'/'+#{app.message.locale}+'/admin/account/delete'}" action="#" method="POST">
+                <table class="table">
+                    <thead>
+                    <th class="text-center"></th>
+                    <th class="text-center" data-th-text="#{column.header.id}">ID</th>
+                    <th class="text-center" data-th-text="#{column.header.company_name}">COMPANY NAME</th>
+                    <th class="text-center" data-th-text="#{column.header.records_used}">USED</th>
+                    <th class="text-center" data-th-text="#{column.header.contracted_records}">CONTRACT</th>
+                    <th class="text-center" data-th-text="#{column.header.updated_at}">UPDATED</th>
+                    <th class="text-center" data-th-text="#{column.header.contract_date}">CONTRACT DATE</th>
+                    <th class="text-center" data-th-text="#{column.header.edit}">EDIT</th>
+                    <th class="text-center" data-th-text="#{column.header.user_management}">USERS</th>
+                    </thead>
+                    <tbody>
+                    <tr th:each="customer : ${customers}" class="text-center">
+                        <td><input type="checkbox" name="customers" th:value="${customer.id}"></td>
+                        <td th:text="${customer.id}"/>
+                        <td th:text="${customer.companyName}"/>
+                        <td th:text="${customer.recordsUsed}"/>
+                        <td th:text="${customer.contractedRecords}"/>
+                        <td th:text="${#temporals.format(customer.updatedAt, 'yyyy/MM/dd HH:mm')}"/>
+                        <td th:text="${#temporals.format(customer.createdAt, 'yyyy/MM/dd HH:mm')}"/>
+                        <td>
+                            <a th:href="@{'/'+#{app.message.locale}+'/admin/account/update/' + ${customer.id}}" class="btn btn-sm btn-action">
+                                <i class="fas fa-edit" data-th-text="#{row.label.edit}"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="" class="btn btn-sm btn-action btn-md">
+                                <i class="fas fa-list" data-th-text="#{row.label.list}"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p th:if="${totalEntries == 0}" style="text-align: center" data-th-text="#{table.footer.message.company_not_found}"></p>
+                <div class="float-right">
+                    <input type="button" data-th-value="#{table.button.label.delete}" id="deleteCustomerButton" data-toggle="modal" data-target="#confirmSubmitCustomerModal"
+                           class="btn btn-sm btn-delete btn-red float-right">
+                    <a th:href="@{'/'+#{app.message.locale}+'/admin/account/add'}" class="btn btn-sm btn-primary btn-add float-right" data-th-text="#{table.button.label.add}"></a>
+                </div>
+                <div class="modal fade" id="confirmSubmitCustomerModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" data-th-text="#{modal.delete.confirmation.account.title}"></h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p data-th-text="#{modal.delete.confirmation.body}"></p>
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal" data-th-text="#{modal.delete.confirmation.button.cancel}"></button>
+                                    <input type="submit" data-th-value="#{modal.delete.confirmation.button.delete}" class="btn btn-red"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="errorDeleteCustomerModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p data-th-text="#{modal.delete.no_selected_account.body}"></p>
+                                <button data-th-text="#{modal.delete.no_selection.button}" type="button" class="btn btn-default float-right" data-dismiss="modal"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container pagination-content col-md-11 col-sm-12" th:if="${totalEntries > 0}">
+            <span>Showing [[${firstEntry}]] to [[${lastEntry}]] of [[${totalEntries}]] entries</span>
+            <ul class="pagination pagination-sm page-numbers float-right">
+                <li class="page-item" th:classappend="${currentPageNumber == 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:if="${param.companyName}" th:href="@{'/'+#{app.message.locale}+'/admin/account/' + ${currentPageNumber-1} + '?companyName=' + ${companyName}}"
+                       data-th-text="#{table.paging.prev}"></a>
+                    <a th:unless="${param.companyName}" th:href="@{'/'+#{app.message.locale}+'/admin/account/' + ${currentPageNumber-1}}" class="page-link" data-th-text="#{table.paging.prev}"></a>
+                </li>
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == customers.number + 1 ? 'active' : ''}">
+                    <a class="page-link" th:if="${param.companyName}" th:href="@{'/'+#{app.message.locale}+'/admin/account/' + ${pageNumber} + '?companyName=' + ${companyName}}"
+                       th:text=${pageNumber}></a>
+                    <a class="page-link" th:unless="${param.companyName}" th:href="@{'/'+#{app.message.locale}+'/admin/account/' + ${pageNumber}}" th:text=${pageNumber}></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPageNumber == totalPages ? 'disabled' : ''}">
+                    <a class="page-link" th:if="${param.companyName}" th:href="@{'/'+#{app.message.locale}+'/admin/account/' + ${currentPageNumber+1} + '?companyName=' + ${companyName}}"
+                       data-th-text="#{table.paging.next}"></a>
+                    <a th:unless="${param.companyName}" th:href="@{'/'+#{app.message.locale}+'/admin/account/' + ${currentPageNumber+1}}" class="page-link" data-th-text="#{table.paging.next}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments :: scripts"></div>
+
+</body>
+</html>

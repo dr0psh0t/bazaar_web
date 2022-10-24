@@ -1,0 +1,288 @@
+@font-face {
+    font-family: 'Mulish';
+    src: url(fonts/Mulish-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Mulish-bold';
+    src: url(fonts/Mulish-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Mulish-italic';
+    src: url(fonts/Mulish-Italic.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Mulish-Medium';
+    src: url(fonts/Mulish-Bold.ttf);
+    font-weight: bold;
+}
+
+body {
+    font-family: 'Mulish-Medium';
+    color: #4b545c;
+    background-color: #eaecef;
+}
+
+h3 {
+    margin-bottom: 0;
+}
+
+.form-label {
+    color: #626b70;
+    margin-bottom: 0;
+}
+
+th {
+    font-family: 'Mulish-Bold';
+}
+
+td {
+    padding: 0.2rem;
+}
+
+.center {
+	margin: auto;
+	width: 50%;
+	padding: 10px;
+	text-align: center;
+ }
+
+.float-right {
+    float: right;
+}
+
+/* Background styles */
+.bg-grey {
+    background-color: #eaecef;
+}
+
+/* Text Colors */
+.text-white {
+    color: #ffffff;
+}
+
+.text-black {
+	color: #000000;
+}
+
+/* Icons */
+.fa-enabled, .fa-disabled {
+	font-size: 1.5em;
+}
+.fa-enabled {
+	color: green;
+}
+.fa-disabled {
+	color: grey;
+}
+
+.icon {
+	color: white;
+	font-size: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.title {
+	padding: 10px;
+    background: rebeccapurple;
+    opacity: inherit;
+    margin-top: 2em;
+    margin-left: 1em;
+    margin-right: 1em;
+    border-radius: 4px;
+}
+
+.main {
+  margin-left: 200px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+}
+
+.page-title {
+    font-family: 'Mulish-bold';
+    font-weight: 500;
+    margin-top: 1em;
+    padding: 0;
+}
+
+/* Navigation Bar styles */
+.navbar-light {
+	background: #ffffff;
+}
+
+.nav-logo {
+    width: 2em;
+    height: 2em;
+    margin-right: 5px;
+    vertical-align: bottom;
+    border-radius: 50%;
+    box-shadow: 0px 5px 3px hsl(210deg 10% 27%);
+    padding: 4px;
+}
+
+@media (min-width: 991.98px) {
+  main {
+    padding-left: 240px;
+  }
+}
+
+/* Sidebar nav */
+.sidenav {
+    height: 100%;
+    width: 220px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: hsl(208deg 10% 33%);
+    overflow-x: hidden;
+}
+
+.sidenav a {
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+
+.sidenav a.active {
+    background-color: #027bff;
+}
+
+.navbar-brand {
+    padding: 10px 10px 13px 16px;
+    border-bottom: solid;
+    border-color: hsl(208deg 6% 58%);
+    margin-right: 0;
+    margin-bottom: 1.5em;
+    font-size: medium;
+}
+
+.sidenav-item {
+    padding: 5px;
+    margin: 6px;
+    border-radius: 4px;
+}
+
+.sidenav-icon {
+    margin: 5px;
+    margin-right: 18px;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.content {
+    margin-top: 1.3em;
+    padding: 1.25em;
+    overflow: auto;
+}
+
+/* Pagination */
+.pagination-content {
+    margin-top: 1em;
+}
+
+.page-numbers {
+    width: 68%;
+}
+
+/* Button and link styles */
+.btn, .nav-item, .page-item {
+    font-family: 'Mulish';
+}
+
+.btn-submit, .btn-cancel {
+	margin: 0.3em;
+	margin-left: 2em;
+}
+
+.btn-cancel {
+    border: solid;
+    border-color: lightgrey;
+}
+
+.btn-action {
+	background: #14a2b8;
+	color: white;
+}
+
+.btn-add, .btn-delete {
+	margin: 1em;
+    margin-top: 5px;
+    margin-left: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.btn-red {
+    color: #fff;
+    background-color: #ff0000;
+}
+
+.btn-search {
+    background: hsl(0deg 0% 85%);
+    border-color: hsl(0deg 0% 85%);
+    color: black;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Form styles */
+.form-control {
+    border: 2px solid #ced4da;
+}
+
+.form-field-group {
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.form-control-label {
+    margin-bottom: 0;
+}
+
+input,
+textarea {
+    padding: 8px 15px;
+    margin: 5px 0px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    font-weight: 300
+}
+
+input:focus,
+textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #00BCD4;
+    outline-width: 0;
+    font-weight: 400
+}
+
+.form-control-search {
+	height: 38px;
+    margin: auto;
+}
+
+/* Table styles */
+a.table-header-link {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.table td, .table thead th {
+    vertical-align: middle;
+    padding: 0.5rem;
+}

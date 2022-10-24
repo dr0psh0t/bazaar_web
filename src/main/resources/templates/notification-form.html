@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head">
+</head>
+<body class="bg-grey">
+<div th:replace="fragments :: navbar_menu"></div>
+<div th:replace="fragments :: admin_sidenav"></div>
+
+<div class="justify-content-center main">
+    <div class="row">
+        <div class="container page-title col-md-11 col-sm-12">
+            <div th:if="${notification.id}" class="col-12">
+                <h3>Notification Management - Edit</h3>
+            </div>
+            <div th:unless="${notification.id}" class="col-12">
+                <h3 data-th-text="#{form.add.notification.header}"></h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container content bg-white col-md-11 col-sm-12">
+            <form id="notificationForm" action="#" th:action="@{'/'+#{app.message.locale}+'/admin/notification/save'}" th:object="${notification}" method="POST">
+
+                <div th:if="${notification.id}" class="col-11 form-field-group">
+                    <label class="form-label">ID</label>
+                    <input type="text" th:field="*{id}" class="form-control" readonly/>
+                </div>
+                <div th:unless="${notification.id}" class="col-11 form-field-group">
+                    <input type="hidden" th:field="*{id}">
+                </div>
+
+                <div class="col-11 form-field-group">
+                    <label class="form-label" data-th-text="#{form.field.publication_date}"></label>
+                    <input type="datetime-local" th:field="*{publicationDate}" class="form-control" name="publicationDateTime"/>
+                </div>
+
+                <div class="col-11 form-field-group">
+                    <label class="form-label" data-th-text="#{form.field.category}"></label>
+                    <select class="form-control" id="categoryDropDownList" th:field="*{notificationCategory}">
+                        <option value="0">Information</option>
+                        <option
+                                th:each="notificationCategory : ${notificationCategories}"
+                                th:value="${notificationCategory.id}"
+                                th:text="${notificationCategory.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-11 form-field-group">
+                    <label class="form-label" data-th-text="#{form.field.title}"></label>
+                    <input type="text" th:field="*{title}" class="form-control" required/>
+                </div>
+
+                <div class="col-11 form-field-group">
+                    <label class="form-label" data-th-text="#{form.field.body}"></label>
+                    <textarea th:field="*{body}" class="form-control" name="body" id="editor" data-th-placeholder="#{form.field.body.placeholder}">
+                        </textarea>
+                </div>
+
+                <div class="col-11 form-field-group">
+                    <button id="notificationFormSubmit" type="button" class="btn btn-sm btn-primary btn-submit float-right" data-th-text="#{form.button.save}"></button>
+                    <a th:href="@{'/'+#{app.message.locale}+'/admin/notification/index'}" class="btn btn-sm btn-light btn-cancel float-right" data-th-text="#{form.button.cancel}"></a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments :: scripts"></div>
+
+</body>
+</html>
